@@ -32,3 +32,54 @@ function greet(customerOne, customerTwo) {
 
 greet.call(sally, 'Terry', 'George');
 // Hi Terry and George, my name is Sally!
+
+greet.call(sally);
+// Hi undefined and undefined, my name is Sally!
+
+greet.apply(sally, ['Terry', 'George']);
+// Hi Terry and George, my name is Sally!
+
+let sally = { name: 'Sally' };
+ 
+function greet(customer) {
+    console.log(`Hi ${customer}, my name is ${this.name}!`);
+}
+ 
+let newGreet = greet.bind(sally); // newGreet is context-bound to sally
+ 
+newGreet('Bob');
+// Hi Bob, my name is Sally!
+ 
+greet('Bob');
+// Hi Bob, my name is !
+
+greet.bind(sally)('Bob');
+// Hi Bob, my name is Sally!
+
+class Event {
+    constructor(title, keywords) {
+        this.title = title;
+        this.keywords = keywords;
+    }
+}
+ 
+class User {
+    constructor(name, interests) {
+        this.name = name;
+        this.interests = interests;
+    }
+ 
+    matchInterests(event) {
+        return event.keywords.some(
+            function(word) {
+                return this.interests.includes(word);
+            }.bind(this) // added to the and of the callback function
+        );
+    }
+}
+ 
+let billy = new User('billy', ['music', 'art', 'movies']);
+let freeMusic = new Event('Free Music Show', ['music', 'free', 'outside']);
+ 
+billy.matchInterests(freeMusic);
+
